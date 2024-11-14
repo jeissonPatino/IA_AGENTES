@@ -11,28 +11,32 @@ gmaps = googlemaps.Client(key=API_KEY)
 def obtener_ruta():
     origen = request.args.get('origen')
     destino = request.args.get('destino')
+    tipo_vehiculo = request.args.get('tipo_vehiculo')
 
     if not origen or not destino:
         return jsonify({'error': 'Origen y destino son requeridos'}), 400
+    directions_result = gmaps.directions(
+        origen,
+        destino,
+        mode= tipo_vehiculo,
+        language="es",
+        units="metric"
+    )
 
-   
-    directions_result = gmaps.directions(origen,
-                                         destino,
-                                         mode="driving",
-                                         language="es",
-                                         units="metric")
-
-    # Procesa la respuesta de la API 
     rutas = []
     for route in directions_result:
         pasos = []
         for leg in route['legs']:
             for step in leg['steps']:
                 pasos.append(step['html_instructions'])
+            latitud_inicio = leg['start_location']['lat']
+            longitud_inicio = leg['start_location']['lng']
         rutas.append({
             'distancia': leg['distance']['text'],
             'tiempo': leg['duration']['text'],
-            'pasos': pasos
+            'pasos': pasos,
+            'latitud_inicio': latitud_inicio,
+            'longitud_inicio': longitud_inicio
         })
 
     return jsonify(rutas)

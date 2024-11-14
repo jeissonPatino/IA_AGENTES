@@ -2,6 +2,78 @@
 <html>
 <head>
   <title>Buscar Mejor Ruta</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(to   
+ bottom, #f0f8ff, #e0ffff); /* Gradiente de color */
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    select {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    input[type="submit"] {
+      padding: 10px;
+      background-color: #007bff; /* Color de fondo del botón */
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    #resultado h2 {
+      color: #007bff; /* Color del título de la ruta */
+    }
+
+    #resultado ol {
+      text-align: left;
+      list-style-type: decimal; /* Estilo de lista numérica */
+      padding-left: 40px;
+    }
+
+    #resultado li {
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
   <h1>Encuentra la mejor ruta</h1>
@@ -12,15 +84,16 @@
     <input type="text" id="destino" name="destino" required><br><br>
     <label for="tipo_vehiculo">Tipo de vehículo:</label><br>
     <select id="tipo_vehiculo" name="tipo_vehiculo">
-      <option value="coche">Coche</option>
-      <option value="moto">Moto</option>
-      <option value="bicicleta">Bicicleta</option>
+      <option value="driving">Coche</option>
+      <option value="driving">Moto</option>
+      <option value="bicycling">Bicicleta</option>
+      <option value="walking">Caminata</option>
+      <option value="transit">Flota</option>
     </select><br><br>
     <input type="submit" value="Buscar">
   </form>
 
-  <div id="resultado">
-    </div>
+  <div id="resultado"></div>
 
   <script>
     const form = document.getElementById('formulario-ruta');
@@ -42,10 +115,10 @@
       })
       .then(response => response.json())
       .then(data => {
-        resultadoDiv.innerHTML = ""; // Limpiar resultados anteriores
+        resultadoDiv.innerHTML = ""; 
 
         if (data.mensaje) {
-          // Mostrar mensaje si existe
+          
           const mensajeP = document.createElement('p');
           mensajeP.textContent = data.mensaje;
           resultadoDiv.appendChild(mensajeP);

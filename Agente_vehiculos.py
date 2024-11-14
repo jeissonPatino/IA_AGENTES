@@ -5,17 +5,21 @@ app = Flask(__name__)
 @app.route('/vehiculo', methods=['GET'])
 def obtener_info_vehiculo():
     tipo_vehiculo = request.args.get('tipo')
-    clima = request.args.get('clima')  # Recibe la descripción del clima
+    clima = request.args.get('clima')
+    
+    dificultad_ruta = request.args.get('dificultad')
 
-    if not tipo_vehiculo or not clima:
-        return jsonify({'error': 'Tipo de vehículo y clima son requeridos'}), 400
+    if not tipo_vehiculo or not clima or not dificultad_ruta:
+        return jsonify({'error': 'Tipo de vehículo, clima y dificultad de ruta son requeridos'}), 400
 
-    # Define la lógica para determinar la compatibilidad
-    compatibilidad = True  # Por defecto, asumimos que es compatible
-    if tipo_vehiculo == "bicicleta" and "lluvia" in clima:
+    
+    compatibilidad = True
+    if tipo_vehiculo == "bicycling" and ("lluvia" in clima or dificultad_ruta == "alta"):
         compatibilidad = False
-    # ... (añade más reglas según tus necesidades)
-
+    
+    if tipo_vehiculo == "walking" and ("lluvia" in clima or dificultad_ruta == "alta"):
+        compatibilidad = False
+    
     return jsonify({'compatibilidad': compatibilidad})
 
 if __name__ == '__main__':
