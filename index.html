@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buscar Mejor Ruta</title>
+</head>
+<body>
+  <h1>Encuentra la mejor ruta</h1>
+  <form id="formulario-ruta">
+    <label for="origen">Ciudad de origen:</label><br>
+    <input type="text" id="origen" name="origen" required><br><br>
+    <label for="destino">Ciudad de destino:</label><br>
+    <input type="text" id="destino" name="destino" required><br><br>
+    <label for="tipo_vehiculo">Tipo de vehículo:</label><br>
+    <select id="tipo_vehiculo" name="tipo_vehiculo">
+      <option value="coche">Coche</option>
+      <option value="moto">Moto</option>
+      <option value="bicicleta">Bicicleta</option>
+    </select><br><br>
+    <input type="submit" value="Buscar">
+  </form>
+
+  <div id="resultado">
+    </div>
+
+  <script>
+    const form = document.getElementById('formulario-ruta');
+    const resultadoDiv = document.getElementById('resultado');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); 
+
+      const origen = document.getElementById('origen').value;
+      const destino = document.getElementById('destino').value;
+      const tipoVehiculo = document.getElementById('tipo_vehiculo').value;
+
+      fetch('http://localhost:5003/mejor_ruta', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ origen, destino, tipo_vehiculo: tipoVehiculo })
+      })
+      .then(response => response.json())
+      .then(data => {
+        resultadoDiv.innerHTML = ""; // Limpiar resultados anteriores
+
+        if (data.mensaje) {
+          // Mostrar mensaje si existe
+          const mensajeP = document.createElement('p');
+          mensajeP.textContent = data.mensaje;
+          resultadoDiv.appendChild(mensajeP);
+        } else {
+          // Mostrar la ruta
+          const rutaDiv = document.createElement('div');
+          rutaDiv.innerHTML = `
+            <h2>Mejor ruta:</h2>
+            <p>Origen: ${data.origen}</p>
+            <p>Destino: ${data.destino}</p>
+            <p>Distancia: ${data.distancia}</p>
+            <p>Tiempo: ${data.tiempo}</p>
+            <h3>Pasos:</h3>
+            <ol>
+              ${data.pasos.map(paso => `<li>${paso}</li>`).join('')} 
+            </ol>
+          `;
+          resultadoDiv.appendChild(rutaDiv);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        resultadoDiv.innerHTML = "<p>Error al obtener la ruta.</p>";
+      });
+    });
+  </script>
+</body>
+</html>
