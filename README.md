@@ -24,7 +24,7 @@ El sistema está compuesto por cuatro agentes:
 
 1.  Clona el repositorio:
     ```bash
-    git clone [https://github.com/tu_usuario/tu_repositorio.git](https://github.com/tu_usuario/tu_repositorio.git)
+    git clone [[https://github.com/tu_usuario/tu_repositorio.git](https://github.com/jeissonPatino/IA_AGENTES.git)]
     ```
 2.  Instala las bibliotecas:
     ```bash
